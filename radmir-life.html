@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radmir Life: с нуля до особняка</title>
+<style>
+:root{--bg:#e7ebef;--card:#fff;--ink:#18212b;--mut:#5d6b79;--blue:#1f5fbf;--yel:#ffc933;--line:#d3dae1;--bar:#d9e0e6;--ok:#16824f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a21;--card:#1e2630;--ink:#eef2f6;--mut:#98a6b4;--blue:#5b9bff;--line:#2f3a47;--bar:#2a3441;--ok:#3ecf8e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a21;--card:#1e2630;--ink:#eef2f6;--mut:#98a6b4;--blue:#5b9bff;--line:#2f3a47;--bar:#2a3441;--ok:#3ecf8e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.logo{font:700 26px/1 "Arial Narrow","Roboto Condensed",Impact,sans-serif;letter-spacing:.5px}
+.logo b{background:var(--yel);color:#18212b;padding:0 6px;margin-left:5px;border-radius:4px}
+.sub,small,#sv{color:var(--mut);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.plate{display:flex;align-items:stretch;background:#fff;color:#111;border:3px solid #111;border-radius:10px;overflow:hidden;margin-bottom:14px}
+.plate .num{flex:1;padding:6px 14px;font:700 clamp(30px,9vw,46px)/1.1 "Arial Narrow","Roboto Condensed",Impact,sans-serif;letter-spacing:1px}
+.plate .reg{border-left:3px solid #111;padding:4px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.plate .reg b{font:700 26px/1 "Arial Narrow",Impact,sans-serif}
+.plate .reg i{font-size:11px;font-style:normal;font-weight:700;color:#fff;background:var(--blue);border-radius:3px;padding:0 4px;margin-top:3px}
+.lab{display:flex;justify-content:space-between;font-weight:600;margin:8px 0 4px}
+.bar{height:12px;background:var(--bar);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .25s linear}
+.bar.e i{background:var(--yel)}
+nav{display:flex;gap:6px;margin:14px 0 10px;overflow-x:auto}
+nav button{flex:1;white-space:nowrap;border:1px solid var(--line);background:var(--card);padding:9px 12px;border-radius:999px;font-weight:600}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{display:grid;gap:8px}
+h3{margin:12px 0 2px;font-size:17px}
+.job{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 14px 18px}
+.job:disabled{opacity:.55;cursor:not-allowed}
+.job:not(:disabled):hover{border-color:var(--blue)}
+.pb{position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--bar)}
+.pf{display:block;height:100%;width:0;background:var(--yel);transition:width .25s linear}
+.em{font-size:30px;width:40px;text-align:center}
+.tx{flex:1;display:flex;flex-direction:column}
+.item{display:flex;align-items:center;gap:12px}
+.buy{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:700}
+.buy:disabled{background:var(--bar);color:var(--mut);cursor:not-allowed}
+.ok{color:var(--ok);font-weight:700}
+.dim{opacity:.45}
+.row{display:flex;gap:8px}
+input{flex:1;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+ul{margin:6px 0 0;padding-left:18px;font-size:14px}
+li{margin:3px 0}
+.ghost{margin-top:14px;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">RADMIR<b>LIFE</b></div><span id="sv">сохранено</span></header>
+<div class="plate"><div class="num" id="mo"></div><div class="reg"><b id="lv"></b><i>RUS</i></div></div>
+<section class="card">
+<div class="lab"><span>Опыт</span><span id="xt" class="sub"></span></div><div class="bar"><i id="xb"></i></div>
+<div class="lab"><span>Энергия</span><span id="et" class="sub"></span></div><div class="bar e"><i id="eb"></i></div>
+<div class="sub" id="inc" style="margin-top:8px"></div>
+</section>
+<nav id="tabs"></nav>
+<main id="main"></main>
+<section class="card" style="margin-top:12px"><b>Журнал</b><ul id="log"></ul></section>
+<button id="rs" class="ghost">Сбросить прогресс</button>
+<p class="sub">Неофициальная фанатская игра. Все коды и деньги здесь только игровые, прогресс хранится в вашем браузере.</p>
+</div>
+<div id="toast"></div>
+<script>
+const $=id=>document.getElementById(id),R=(a,b)=>a+Math.random()*(b-a),KEY='radmir_life_v1';
+const J=[
+{id:'courier',n:'Курьер',e:'🛵',lv:1,en:8,t:1500,m:[110,170],x:10},
+{id:'taxi',n:'Таксист',e:'🚕',lv:3,en:12,t:2000,m:[290,420],x:22},
+{id:'miner',n:'Шахтёр',e:'⛏️',lv:5,en:15,t:2500,m:[600,820],x:40},
+{id:'truck',n:'Дальнобойщик',e:'🚛',lv:8,en:20,t:3000,m:[1400,1900],x:80},
+{id:'cash',n:'Инкассатор',e:'💼',lv:12,en:25,t:3500,m:[3500,4800],x:160}];
+const C=[
+{id:'zhig',n:'Жигули',e:'🚗',p:5000,k:.1},
+{id:'prio',n:'Лада Приора',e:'🚙',p:25000,k:.25},
+{id:'merc',n:'Mercedes G-класс',e:'🚘',p:120000,k:.5},
+{id:'lambo',n:'Lamborghini',e:'🏎️',p:600000,k:1}];
+const H=[
+{id:'van',n:'Вагончик',e:'🛖',p:10000,i:15},
+{id:'flat',n:'Квартира',e:'🏢',p:80000,i:120},
+{id:'house',n:'Дом с гаражом',e:'🏡',p:500000,i:800},
+{id:'villa',n:'Особняк',e:'🏰',p:3000000,i:5000}];
+const A=[
+{n:'Первая смена',e:'🥉',d:'Выполнить 1 работу',f:()=>s.jobs>=1},
+{n:'Трудяга',e:'🔨',d:'Выполнить 25 работ',f:()=>s.jobs>=25},
+{n:'Профи',e:'🛠️',d:'Выполнить 100 работ',f:()=>s.jobs>=100},
+{n:'Пятёрка',e:'⭐',d:'Достичь 5 уровня',f:()=>s.lv>=5},
+{n:'Десятка',e:'🌟',d:'Достичь 10 уровня',f:()=>s.lv>=10},
+{n:'Своя тачка',e:'🔑',d:'Купить машину',f:()=>s.cars.length>=1},
+{n:'Свой угол',e:'🏠',d:'Купить жильё',f:()=>s.homes.length>=1},
+{n:'Миллионер',e:'💰',d:'Накопить $1 000 000',f:()=>s.m>=1e6}];
+const T=[['work','Работа'],['own','Имущество'],['ach','Награды'],['bonus','Бонусы']];
+const def=()=>({m:300,xp:0,lv:1,en:100,jobs:0,cars:[],homes:[],ach:[],log:[],promo:[],day:'',pass:0,last:Date.now()});
+let s=def(),act=null,tab='work',tt=0,rt=0;
+try{const r=localStorage.getItem(KEY);if(r)s=Object.assign(def(),JSON.parse(r))}catch(e){}
+const fmt=n=>'$'+Math.floor(n).toLocaleString('ru-RU');
+const need=l=>Math.round(60*Math.pow(l,1.6));
+const mult=()=>1+Math.max(0,...s.cars.map(id=>C.find(c=>c.id==id).k));
+const inc=()=>s.homes.reduce((a,id)=>a+H.find(h=>h.id==id).i,0);
+const regen=()=>.5+.25*s.homes.length;
+function save(){s.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(s));$('sv').textContent='сохранено'}catch(e){$('sv').textContent='сохранение недоступно'}}
+function toast(t){const e=$('toast');e.textContent=t;e.className='on';clearTimeout(tt);tt=setTimeout(()=>e.className='',2300)}
+function say(t){s.log=[t].concat(s.log).slice(0,6);drawLog()}
+function drawLog(){$('log').innerHTML=s.log.map(l=>'<li>'+l+'</li>').join('')}
+function check(){A.forEach((a,i)=>{if(!s.ach.includes(i)&&a.f()){s.ach.push(i);toast(a.e+' Награда: '+a.n);say(a.e+' Награда «'+a.n+'»')}})}
+function addXp(x){s.xp+=x;while(s.xp>=need(s.lv)){s.xp-=need(s.lv);s.lv++;s.en=100;toast('🎉 Новый уровень: '+s.lv);say('🎉 Вы достигли уровня '+s.lv+', энергия восстановлена')}}
+function go(id){if(act)return;const j=J.find(q=>q.id==id);if(s.lv<j.lv||s.en<j.en)return toast('Не хватает энергии, дайте себе отдохнуть');s.en-=j.en;act={j:j,t0:Date.now()}}
+function finish(){const j=act.j;act=null;let g=Math.round(R(j.m[0],j.m[1])*mult()),x=j.x,r=Math.random(),n='';
+if(r<.12){const f=Math.round(g*.4);g-=f;n=', 🚔 штраф '+fmt(f)}
+else if(r<.27){const t=Math.round(g*.3);g+=t;n=', 💸 чаевые '+fmt(t)}
+else if(r<.33){x*=2;n=', 🍀 удачный день, опыт ×2'}
+s.m+=g;s.jobs++;addXp(x);say(j.e+' '+j.n+': +'+fmt(g)+', '+x+' опыта'+n);check();save();render()}
+function tick(dt){s.en=Math.min(100,s.en+regen()*dt);s.pass+=inc()/5*dt;if(s.pass>=1){const p=Math.floor(s.pass);s.m+=p;s.pass-=p}
+if(act&&Date.now()-act.t0>=act.j.t)finish();upd()}
+function upd(){
+$('lv').textContent=s.lv;$('mo').textContent=fmt(s.m);
+$('xb').style.width=100*s.xp/need(s.lv)+'%';$('xt').textContent=Math.floor(s.xp)+' из '+need(s.lv);
+$('eb').style.width=s.en+'%';$('et').textContent=Math.floor(s.en)+' из 100';
+$('inc').textContent='Заработок ×'+mult().toFixed(2)+', жильё приносит '+fmt(inc())+' за 5 секунд, отдых '+regen().toFixed(2)+' энергии в секунду';
+document.querySelectorAll('[data-p]').forEach(b=>b.disabled=s.m<+b.dataset.p);
+document.querySelectorAll('[data-j]').forEach(b=>{const j=J.find(q=>q.id==b.dataset.j);b.disabled=!!act||s.lv<j.lv||s.en<j.en;
+b.querySelector('.pf').style.width=act&&act.j.id==j.id?Math.min(100,(Date.now()-act.t0)/j.t*100)+'%':'0'})}
+function item(o,k,d){const own=s[k].includes(o.id);
+return '<div class="card item"><span class="em">'+o.e+'</span><span class="tx"><b>'+o.n+'</b><small>'+d+'</small></span>'+(own?'<span class="ok">Куплено</span>':'<button class="buy" data-p="'+o.p+'" data-b="'+k+':'+o.id+'">'+fmt(o.p)+'</button>')+'</div>'}
+function render(){
+$('tabs').innerHTML=T.map(t=>'<button class="'+(t[0]==tab?'on':'')+'" data-t="'+t[0]+'">'+t[1]+'</button>').join('');
+let h='';
+if(tab=='work')h=J.map(j=>{const lock=s.lv<j.lv;
+return '<button class="card job" data-j="'+j.id+'"><span class="em">'+(lock?'🔒':j.e)+'</span><span class="tx"><b>'+j.n+'</b><small>'+(lock?'Откроется на уровне '+j.lv:fmt(j.m[0]*mult())+'–'+fmt(j.m[1]*mult())+', энергия −'+j.en+', опыт +'+j.x)+'</small></span><span class="pb"><i class="pf"></i></span></button>'}).join('');
+else if(tab=='own')h='<h3>Транспорт</h3>'+C.map(c=>item(c,'cars','Заработок +'+Math.round(c.k*100)+'%, действует лучшая машина')).join('')+'<h3>Недвижимость</h3>'+H.map(x=>item(x,'homes','+'+fmt(x.i)+' за 5 секунд и быстрее отдых')).join('');
+else if(tab=='ach')h=A.map((a,i)=>'<div class="card item '+(s.ach.includes(i)?'':'dim')+'"><span class="em">'+a.e+'</span><span class="tx"><b>'+a.n+'</b><small>'+a.d+'</small></span>'+(s.ach.includes(i)?'<span class="ok">Получено</span>':'')+'</div>').join('');
+else h='<div class="card item"><span class="em">🎁</span><span class="tx"><b>Ежедневный бонус</b><small>'+fmt(500*s.lv)+', растёт с уровнем</small></span><button class="buy" id="daily">'+(s.day==new Date().toDateString()?'Получено':'Забрать')+'</button></div><div class="card"><b>Промокод</b><small style="display:block;margin:2px 0 8px">Попробуйте RADMIRTOP, RADMIRRADMIR или START</small><div class="row"><input id="pi" placeholder="Введите код" autocomplete="off"><button class="buy" id="pr" style="background:var(--blue)">Применить</button></div></div>';
+$('main').innerHTML=h;upd()}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.t){tab=b.dataset.t;render()}
+else if(b.dataset.j)go(b.dataset.j);
+else if(b.dataset.b){const p=b.dataset.b.split(':'),o=(p[0]=='cars'?C:H).find(q=>q.id==p[1]);
+if(s.m>=o.p&&!s[p[0]].includes(o.id)){s.m-=o.p;s[p[0]].push(o.id);say('🛒 Куплено: '+o.n);toast('Куплено: '+o.n);check();save();render()}}
+else if(b.id=='daily'){const d=new Date().toDateString();if(s.day==d)return toast('Сегодня бонус уже получен, возвращайтесь завтра');s.day=d;s.m+=500*s.lv;say('🎁 Ежедневный бонус '+fmt(500*s.lv));toast('Бонус получен');save();render()}
+else if(b.id=='pr'){const c=$('pi').value.trim().toUpperCase(),K={RADMIRTOP:5000,RADMIRRADMIR:12000,START:2500};
+if(!K[c])return toast('Такого кода нет');if(s.promo.includes(c))return toast('Этот код уже использован');
+s.promo.push(c);s.m+=K[c];say('🎟️ Промокод '+c+': +'+fmt(K[c]));toast('Код активирован: +'+fmt(K[c]));check();save();render()}
+else if(b.id=='rs'){if(b.dataset.w){try{localStorage.removeItem(KEY)}catch(x){}s=def();act=null;b.textContent='Сбросить прогресс';delete b.dataset.w;clearTimeout(rt);say('Новая игра, удачи');tab='work';render();return}
+b.dataset.w=1;b.textContent='Нажмите ещё раз, чтобы стереть всё';rt=setTimeout(()=>{delete b.dataset.w;b.textContent='Сбросить прогресс'},3500)}});
+render();drawLog();
+const m0=s.m;tick(Math.min((Date.now()-s.last)/1000,3600));
+if(s.log.length==0)say('👋 Добро пожаловать на сервер. Начните с курьера.');
+else if(s.m-m0>=1)toast('Пока вас не было, жильё принесло '+fmt(s.m-m0));
+let last=Date.now();
+setInterval(()=>{const n=Date.now();tick(Math.min((n-last)/1000,3600));last=n},200);
+setInterval(save,5000);
+</script>
+</body>
+</html>
